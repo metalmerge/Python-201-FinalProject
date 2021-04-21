@@ -1,3 +1,49 @@
+def eliminate_last(min, collection, candidate_amount):
+	for g in range(candidate_amount):
+		if collection[g]["votes"] == min:
+			collection[g]["eliminated"] == True
+def find_tie(min, collection, candidate_amount):
+	stillIn = 0;
+  for g in range(candidate_amount):
+    if !collection[e]["eliminated"]:
+      stillIn++;
+  
+  tied = 0;
+  for t in range(stillIn):
+    if candidates[t]["votes"] == min:
+      tied++;
+  if tied == stillIn:
+    return true
+  else:
+    return false
+def tabulate(collection, candidate_amount, voter_amount):
+	for x in range(candidate_amount):
+		collection[x]["votes"] = 0;
+
+	for l in range(voter_amount)
+def find_min(collection, candidate_amount):
+	listing = []
+	for g in range(candidate_amount):
+		listing.append(collection[g]["votes"])
+	
+	minimum = min(listing)
+	return minimum
+def reset_votes(collection, candidate_amount):
+	for x in range(candidate_amount):
+		collection[x]["votes"] = 0;
+def winner_found(collection, candidate_amount):
+	sum = 0;
+	for x in range(candidate_amount):
+		sum += collection[x]["votes"]
+	for y in range(candidate_amount):
+		if collection[y]["votes"] > sum:
+			print(collection[y]["name"])
+			return True
+		else:
+			return False
+def print_votes(collection, candidate_amount):
+	for x in range(candidate_amount):
+		print(collection[x]["votes"])
 def vote_finder():
 	#voters = int(input("How many voters? "))
 	voters = 3
@@ -18,16 +64,15 @@ def vote(candidate_collection, voter_amount, candidate_amount, vote_collection):
 	for x in range(candidate_amount):
 		for b in range(voter_amount):
 			if candidate_collection[x]["name"] == vote_collection[b]["name"]:
-				candidate_collection[x]["votes"] += 1
-				
+				candidate_collection[x]["votes"] += 1			
 def candidate_finder(collection):
 	temp_count = 2
 	#int(input("How many candiates? "))
 	#for t in range(temp_count):
 		#candidate = input("Candidate name: ")
 		#collection.append({"name":candidate, "votes":0,})
-	collection.append({"name":"Dima", "votes":0,})
-	collection.append({"name":"Jason", "votes":0,})
+	collection.append({"name":"a", "votes":0,})
+	collection.append({"name":"x", "votes":0,})
 	return temp_count
 def find_max(collection, candidate_amount):
 	maximum = 0
@@ -42,8 +87,16 @@ Rvotes = []
 Rcandidates = []
 Avotes = []
 Acandidates = []
+example = [
+	{
+	"name": "Dima",
+	"rank#": "Dima",
+	"votes": 0,
+	"eliminated": False 
+	}
+]
 #Potential bugs: one vote, invalid input for amount
-choice = 1
+choice = 2
 #choice = int(input("""
 #Pick what election type:
 #1- Plurality
@@ -77,7 +130,7 @@ if choice == 1:
 	print_winners(Pcandidate_count, Pcandidates)
 	
 elif choice == 2:
-	print("""The two-round system is a voting method used to elect a single candidate, where voters cast a single vote for their preferred candidate. The election proceeds to a second round only if in the first round no candidate has received a simple majority of votes cast, or at least some other prescribed percentage.""")
+	print("""The two-round system is a voting method used to elect a single candidate, where voters cast a single vote for their preferred candidate. The election proceeds to a second round only if in the first round no candidate has received a simple majority of votes cast.""")
 	Rcandidate_count = candidate_finder(Rcandidates)
 	
 	Rvoter_count = vote_finder()
@@ -86,9 +139,33 @@ elif choice == 2:
 		print("Voter " + str(q+1) + "'s rankings:")
 		for u in range(Rcandidate_count):
 			runoff_vote = input("Rank " + str(u + 1) + "-")
-			Rvotes.append({"Rank" + str(u+1):runoff_vote})
-	#print(Rvotes)	
-		
+			Rvotes.append({"Rank": str(u+1), "name":runoff_vote, "eliminated":False})
+	
+	#sub = len(Rvotes)
+	#for s in range(sub):
+	#	if Rvotes[s]["Rank"] == "1":
+	#		for d in range(Rcandidate_count):
+	#			if Rcandidates[d]["name"] == Rvotes[s]["name"]:
+	#				Rcandidates[d]["votes"] += 1
+	
+	while(True):
+		tabulate(Rcandidates,Rcandidate_count, Rvoter_count)
+		check = winner_found(Rcandidates,Rcandidate_count)
+		if check == True:
+			break
+		minimum = find_min(Rcandidates,Rcandidate_count)
+		bool_tie = find_tie(minimum,Rcandidates,Rcandidate_count)
+		if bool_tie == True:
+			for n in range(Rcandidate_count):
+				if !Rcandidates[n]["eliminated"]:
+					print(Rcandidates[n]["name"])
+			break
+			
+		eliminate_last(minimum, Rcandidates,Rcandidate_count)
+
+		reset_votes(Rcandidates,Rcandidate_count)
+	
+
 elif choice == 3:
 	print("""Approval voting is a single-winner electoral system where each voter may select ("approve") any number of candidates.""")
 	Acandidate_count = candidate_finder(Acandidates)
