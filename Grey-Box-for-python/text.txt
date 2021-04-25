@@ -1,0 +1,3 @@
+<button onclick="testing()">Start</button>
+	<div id="myDIV">
+	</div>

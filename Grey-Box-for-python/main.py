@@ -1,4 +1,5 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
+import Plurality_Code
 
 
 app = Flask('app')
@@ -13,73 +14,41 @@ def home():
 @app.route('/Plurality')
 def Plurality():
 		return render_template("Plurality.html")
-VOTES = ["Dima", "Dima", "Gabby",]
-Pcandidates = [
-        {
-            "name": "Dima",
-            "votes": 0,
-        },
-        {
-            "name": "Jack",
-            "votes": 0,
-        },
-        {
-            "name": "Gabby",
-            "votes": 0,
-        },
-    ]
-for x in Pcandidates:
-	
-	if x["name"] == VOTES[1]:
-		x["votes"] += 1
-		max = 0
-for y in Pcandidates:
-	if y["votes"] > max:
-		max = y["votes"]
-for z in Pcandidates:
-	if z["votes"] == max:
-		print(z["name"])
-		
+
+#@app.route('/Plurality_Input', methods=['POST'])
+#def Amount():
+		#Candidate_Count = int(request.form['candidate_count'])
+		#Voter_Count = int(request.form['voter_count'])
+		#for i in range(Candidate_Count):
+			
+		#return render_template("Plurality.html")
 
 
 @app.route('/Runoff')
 def Runoff():
-	return render_template("Runoff.html")
-	Rcandidates = [
-        {
-            "name": "Eren",
-            "votes": 0,
-        },
-        {
-            "name": "Okabe",
-            "votes": 0,
-        },
-        {
-            "name": "Kurisu",
-            "votes": 0,
-        },
-    ]
+		return render_template("Runoff.html")
 
 
 
 @app.route('/Approval')
 def Approval():
-	return render_template("Approval.html")
-	Acandidates = [
-        {
-            "name": "Joe",
-            "votes": 0,
-        },
-        {
-            "name": "Falco",
-            "votes": 0,
-        },
-        {
-            "name": "Sheik",
-            "votes": 0,
-        },
-    ]
+		return render_template("Approval.html")
 
+
+@app.route('/Plurality', methods=['POST'])
+def Questions():
+		CandidateOne = request.form['candidateOne']
+		CandidateTwo = request.form['candidateTwo']
+		VoterOne = request.form['voterOne']
+		VoterTwo = request.form['voterTwo']
+		VoterThree = request.form['voterThree']
+		
+		
+		winner = Plurality_Code.Start_Pluraility(CandidateOne,CandidateTwo,VoterOne,VoterTwo,VoterThree)
+		
+		return render_template("Plurality.html",v = winner)
+
+    
 
 app.run(host='0.0.0.0', port=8080)
 
