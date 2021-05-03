@@ -1,0 +1,198 @@
+import universal_functions
+def preference_check(preferences, current):
+	for elem in preferences[current]:
+		if preferences[current].count(elem) > 1 and elem != []: 
+			return True
+	return False
+def vote(candidates, candidate_amount, preference, voter_amount):
+	for i in range(voter_amount):
+		
+		while (True): 
+			print("Voter " + str(i+1) + "'s rankings")
+			for j in range(candidate_amount):
+				trueName = 0
+				while (True):
+					name = input("Rank " + str(j + 1) + "-")
+					for c in range(candidate_amount):			
+						if name == candidates[c]["name"]:
+							trueName += 1
+					if trueName == 1:
+						break
+					else: 
+						print("Invalid Name")
+				preference[i][j] = name
+			print("")
+			
+			checker = preference_check(preference, i)
+			
+			if checker == True:
+				print('Invalid, candidate names match.')
+				preference[i] = [[],[],[],[],[],[],[],[]]
+			else:
+				break
+	
+	for b in range(voter_amount):
+		for x in range(candidate_amount):
+			if preference[b][0] == candidates[x]["name"]:
+				candidates[x]["votes"] += 1
+def eliminate_last(min, collection, candidate_amount):
+	for g in range(candidate_amount):
+		if collection[g]["votes"] == min:
+			collection[g]["eliminated"] = True		
+def find_tie(min, collection, candidate_amount):
+	remaining_amount = 0
+	for g in range(candidate_amount):
+		if collection[g]["eliminated"] == False:
+			remaining_amount += 1
+	
+	tied = 0
+	for t in range(remaining_amount):
+		if collection[t]["votes"] == min:
+			tied += 1
+	if tied == remaining_amount:
+		return True
+	else:
+		return False
+def find_min(collection, candidate_amount):
+	minimum = 100
+	for x in range(candidate_amount):
+		if collection[x]["eliminated"] == False:
+			if collection[x]["votes"] < minimum:
+				minimum = collection[x]["votes"]
+	return minimum
+def reset_votes(collection, candidate_amount):
+	for x in range(candidate_amount):
+		collection[x]["votes"] = 0
+def winner_found(collection, candidate_amount, voter_amount, percentage_coll):
+	yes = 0
+	sum = 0
+	for y in range(candidate_amount):
+		if collection[y]["votes"] > voter_amount / 2:
+			print("The winner is: " + collection[y]["name"])
+			yes = 1
+			for p in range(candidate_amount):
+				sum += percentage_coll[p]["votes"]
+			percentage = round(percentage_coll[y]["votes"] / sum * 100)
+
+			print("Won with " + str(percentage) + "% of the vote")
+	if yes == 1:
+		return True
+	else:
+		return False
+def tabulate(collection, candidate_amount, voter_amount,preference):
+	
+	for x in range(candidate_amount):
+		collection[x]["votes"] = 0
+	
+
+	for l in range(voter_amount):
+		first = preference[l][0]
+		second = preference[l][1]
+		third = preference[l][2]
+		fourth = preference[l][3]
+		fifth = preference[l][4]
+		sixth = preference[l][5]
+		seventh = preference[l][6]
+		
+		for r in range(candidate_amount):
+			if collection[r]["eliminated"] == True:
+				if collection[r]["name"] == first:
+					preference[l][0] = preference[l][1]
+				elif collection[r]["name"] == second:
+					 preference[l][1] = preference[l][2]
+				elif collection[r]["name"] == third:
+					 preference[l][2] = preference[l][3]
+				elif collection[r]["name"] == fourth:
+					 preference[l][3] = preference[l][4]
+				elif collection[r]["name"] == fifth:
+					 preference[l][4] = preference[l][5]
+				elif collection[r]["name"] == sixth:
+					 preference[l][5] = preference[l][6]
+				elif collection[r]["name"] == seventh:
+					 preference[l][6] = preference[l][7]
+		
+		
+	
+	for d in range(voter_amount):
+		for v in range(candidate_amount):
+			if collection[v]["eliminated"] == False:
+				if collection[v]["name"] == preference[d][0]:
+					collection[v]["votes"] += 1
+def vote_finder():
+	while (True):
+		voters = int(input("How many voters? (10 is maximum allowed because too much typing)\n"))
+		if voters < 11 and voters > 0:
+			break
+		else:
+			print("Invalid, not within allowed amount")
+	return voters
+def candidate_finder(collection, temp_count):
+	
+	for t in range(temp_count):
+		candidate = input("Candidate name: ")
+		collection.append({"name":candidate, "votes":0,"eliminated":False})
+	
+	check = universal_functions.candidate_checker(collection)
+		
+	return check
+def start_Runoff():
+	Rcandidates = []
+	percentage_data = []
+	preferences =  []
+
+
+	while (True):
+		Rcandidate_count = int(input("How many candiates? (8 is maximum allowed because too much typing)\n"))
+		if Rcandidate_count < 9 and Rcandidate_count > 1:
+			break
+		else:
+			print("Invalid, not within allowed amount")
+
+	while (True):
+		checker = candidate_finder(Rcandidates, Rcandidate_count)
+		if checker == True:
+			print('Invalid, candidate names match.')
+			Rcandidates = Rcandidates[:-Rcandidate_count or None]
+		else:
+			break
+
+	Rvoter_count = vote_finder()
+	
+
+	for i in range(0,10):
+			preferences.append([])
+	for v in range(0,10):
+		for t in range(0,8):
+			preferences[v].append([])
+
+	vote(Rcandidates, Rcandidate_count, preferences, Rvoter_count)
+	
+
+	for z in range(Rcandidate_count):
+		percentage_data.append({"name":Rcandidates[z]["name"],"votes":Rcandidates[z]["votes"]})
+	
+
+	while(True):
+		
+		tabulate(Rcandidates,Rcandidate_count, Rvoter_count, preferences)
+		print(preferences)
+		for b in range(Rcandidate_count):
+			print(str(Rcandidates[b]["votes"]) + str(Rcandidates[b]["name"]))
+		check = winner_found(Rcandidates,Rcandidate_count, Rvoter_count, percentage_data)
+		if check == True:
+			break
+		
+		minimum = find_min(Rcandidates,Rcandidate_count)
+		
+		bool_tie = find_tie(minimum,Rcandidates,Rcandidate_count)
+		if bool_tie == True:
+			print("It is a tie, the winners are:")
+			for n in range(Rcandidate_count):
+				if Rcandidates[n]["eliminated"] == False:
+					print(Rcandidates[n]["name"])
+			break
+				
+		eliminate_last(minimum, Rcandidates,Rcandidate_count)
+
+		reset_votes(Rcandidates,Rcandidate_count)
+		
