@@ -1,0 +1,25 @@
+body {
+    font-family: serif;
+    background-color: (0,83,39);
+    color: red;
+}
+
+a {
+    color: blue;
+    text-decoration: none;
+}
+
+a:hover {
+    font-weight: bold;
+		color: red;
+}
+
+blockquote {
+    border: 1px dotted red;
+    padding: 10px;
+    width: 300px;
+}
+p {
+	font-family: serif;
+	color:darkblue;
+}

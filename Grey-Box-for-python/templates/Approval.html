@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="static/style.css">
+	<title>Approval Page</title>
+</head>
+
+<body>
+	<h1>Approval</h1>
+	<p>Approval voting is a single-winner electoral system where each voter may select ("approve") any number of candidates.</p>
+	<p>The winner is: {{a}}</p>
+	<p>Won with: {{p}}% of the vote.</p>
+	<br>
+	<form class="userinput_A" method="POST" id="approval">
+    <input type="text" name="AcandidateOne">
+		<input type="text" name="AcandidateTwo">
+		<br>
+		<input type="text" name="AvoterOne">
+		<input type="text" name="AvoterTwo">
+		<input type="text" name="AvoterThree">
+    <button type="submit">Submit</button>
+		<a href="/Plurality">Plurality</a>
+				<a href="/Runoff">Runoff</a>
+				<br>
+				<a href="/">Home</a>
+				<p><a href="?">Reset</a></p>
+    </body>
+</html>
+
+        
+     
+				 
